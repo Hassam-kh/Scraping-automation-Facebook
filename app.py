@@ -26,6 +26,7 @@ locations = df["Postcodes"]
 # print (description[0])
 url = 'http://www.facebook.com'
 
+# print(len(locations))
 # -------------------------------------------------------------------------------------------------------------------------------
 
 # Initialize Selenium driver
@@ -40,7 +41,8 @@ def get_driver(inp):
     time.sleep(5)
     driver.maximize_window()
     time.sleep(2)
-    return driver
+    count = 0
+    return count ,driver
 
 
 # -------------------------------------------------------------------------------------------------------------------------------
@@ -98,11 +100,10 @@ def run_script(driver, images_path, title, price, tags, description, location):
 
 # -------------------------------------------------------------------------------------------------------------------------------
 
-
 for idx, i in enumerate(emails):
 # -------------------------------------------------------------------------------------------------------------------------------
 
-    driver = get_driver(idx)
+    count, driver = get_driver(idx)
     try:
         # Log in to Facebook
         driver.find_element(By.CSS_SELECTOR, "[aria-label='Email address or phone number']").send_keys(i)
@@ -116,7 +117,7 @@ for idx, i in enumerate(emails):
         print(e)
 
 # -------------------------------------------------------------------------------------------------------------------------------
-
+    # print(locations[0])
     # Get all file names in the "images" folder
     image_files = os.listdir("images")
     for i in image_files:
@@ -124,7 +125,10 @@ for idx, i in enumerate(emails):
         print(images_path)
         time.sleep(2)
         try:
-            run_script(driver, images_path, title, price, tags, description, locations)
+            run_script(driver, images_path, title, price, tags, description, locations[count])
+            count += 1
+            if count == len(locations):
+                count = 0
         except Exception as e:
             print("Failed: image_path: ", images_path)
             print(e)
